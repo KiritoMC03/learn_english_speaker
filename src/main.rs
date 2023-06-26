@@ -50,7 +50,7 @@ fn main() {
         let tanslates = load_translates();
         for item in &tanslates {
             println!("{} - {}", item.rus, item.eng);
-            say_trananslate(item, &rus_speaker, &eng_speaker);
+            say_trananslate(item, &rus_speaker, &eng_speaker, settings.words_delay);
             std::thread::sleep(Duration::from_secs(settings.items_delay));
         }
         drop(tanslates);
@@ -138,10 +138,10 @@ fn open_translates(path: String) -> File {
     File::open(path).unwrap()
 }
 
-fn say_trananslate(target: &Translate, rus_sp: &GTTSClient, eng_sp: &GTTSClient) {
+fn say_trananslate(target: &Translate, rus_sp: &GTTSClient, eng_sp: &GTTSClient, delay: u64) {
     match rus_sp.speak(target.rus.as_str()) {
         Ok(_) => {
-            std::thread::sleep(Duration::from_secs(STD_WORDS_DELAY));
+            std::thread::sleep(Duration::from_secs(delay));
             eng_sp.speak(target.eng.as_str());
         },
         Err(_) => { },
