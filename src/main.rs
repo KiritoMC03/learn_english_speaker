@@ -3,6 +3,9 @@ use std::{path::Path, fs::File, io::{BufReader, BufRead, Write}, time::Duration}
 
 use tts_rust::{ tts::GTTSClient, languages::Languages };
 
+use rand::thread_rng;
+use rand::seq::SliceRandom;
+
 const STD_WORDS_DELAY : u64 = 1;
 const STD_ITEMS_DELAY : u64 = 3;
 const STD_REPEATS_DELAY : u64 = 10;
@@ -47,7 +50,8 @@ fn main() {
     loop {
         let settings = load_settings();
         println!("{:?}", settings);
-        let tanslates = load_translates();
+        let mut tanslates = load_translates();
+        tanslates.shuffle(&mut thread_rng());
         for item in &tanslates {
             println!("{} - {}", item.rus, item.eng);
             say_trananslate(item, &rus_speaker, &eng_speaker, settings.words_delay);
@@ -165,4 +169,8 @@ impl Translate {
 
 fn is_settings_valid_char(c: &char) -> bool {
     c.is_numeric()
+}
+
+fn notificate() {
+    
 }
